@@ -1,0 +1,24 @@
+{
+    "name": "paulloft/gdn-db",
+    "description": "SQL query builder",
+    "type": "library",
+    "keywords": ["garden", "framework", "php", "SQL", "Query builder"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Paul Loft",
+            "email": "info@paulloft.ru",
+            "role": "developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "ext-PDO": "*",
+        "ext-pdo_mysql": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Garden\\Db": "src"
+        }
+    }
+}
