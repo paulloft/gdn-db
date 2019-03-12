@@ -2,8 +2,8 @@
 
 namespace Garden\Db\Database;
 
+use Garden\Db\Cache;
 use Garden\Db\Database;
-use Garden\Gdn;
 
 /**
  * Database query wrapper
@@ -19,6 +19,7 @@ class Query
 
     // Cache lifetime
     protected $_lifetime;
+
 
     // SQL statement
     protected $_sql;
@@ -75,13 +76,12 @@ class Query
      */
     public function cached($lifetime = null, $force = false)
     {
-        if ($lifetime === null) {
-            // Use the global setting
-            $lifetime = \Garden\Cache::DEFAULT_LIFETIME;
+        if ($lifetime !== null) {
+            $this->_lifetime = $lifetime;
         }
 
         $this->_forceExecute = $force;
-        $this->_lifetime = $lifetime;
+
 
         return $this;
     }
@@ -211,13 +211,17 @@ class Query
 
         // Compile the SQL query
         $sql = $this->compile($db);
+        /**
+         * @var Cache
+         */
+        $cachedClass = $db->configValue('cached_class', Cache\Simple::class);
 
-        if ($this->_lifetime !== null && $this->_type === Database::SELECT) {
+        if ($cachedClass !== null && $this->_lifetime !== null && $this->_type === Database::SELECT) {
             // Set the cache key based on the database instance name and SQL
-            $cache_key = 'Database::query("' . $db . '", "' . $sql . '")';
+            $cacheKey = 'Database::query("' . $db . '", "' . $sql . '")';
 
             // Read the cache first to delete a possible hit with lifetime <= 0
-            $result = Gdn::cache()->get($cache_key);
+            $result = $cachedClass::get($cacheKey);
             if ($result !== null && !$this->_forceExecute) {
                 // Return a cached result
                 return new Database\Result\Cached($result, $sql, $asObject, $objectParams);
@@ -227,9 +231,9 @@ class Query
         // Execute the query
         $result = $db->query($this->_type, $sql, $asObject, $objectParams);
 
-        if (isset($cache_key) && $this->_lifetime > 0) {
+        if (isset($cacheKey) && $this->_lifetime > 0) {
             // Cache the result array
-            Gdn::cache()->set($cache_key, $result->as_array(), $this->_lifetime);
+            $cachedClass::set($cacheKey, $result->as_array(), $this->_lifetime);
         }
 
         return $result;

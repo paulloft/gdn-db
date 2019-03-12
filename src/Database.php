@@ -338,6 +338,17 @@ abstract class Database {
     }
 
     /**
+     * Returns config value
+     * @param $key
+     * @param null $default
+     * @return mixed|null
+     */
+    public function configValue($key, $default = null)
+    {
+        return $this->_config[$key] ?? $default;
+    }
+
+    /**
      * Quote a value for an SQL query.
      *
      * @param mixed $value any value to quote
