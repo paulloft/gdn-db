@@ -92,7 +92,7 @@ abstract class SQL extends Database
             $column->name = $row['Field'];
             $column->default = $row['Default'];
             $column->dataType = $type;
-            $column->allownull = ($row['null'] === 'YES');
+            $column->allowNull = ($row['Null'] === 'YES');
             $column->position = ++$count;
             $column->length = $length;
 
