@@ -325,7 +325,7 @@ abstract class Database {
      */
     public function tablePrefix(): string
     {
-        return $this->_config['tablePrefix'];
+        return $this->_config['tablePrefix'] ?? '';
     }
 
     /**
@@ -334,7 +334,7 @@ abstract class Database {
      */
     public function encoding(): string
     {
-        return $this->_config['charset'];
+        return $this->_config['charset'] ?? 'utf8';
     }
 
     /**
