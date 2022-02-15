@@ -11,7 +11,7 @@ use Garden\Db\Database;
 class PDO extends SQL {
 
     // PDO uses no quoting for identifiers
-    protected $identifier = '';
+    protected $identifier = '`';
 
     /**
      * @var \PDO
