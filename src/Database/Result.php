@@ -150,6 +150,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      * Implements [Countable::count], returns the total number of rows.
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->_totalRows;
@@ -160,6 +161,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      * @param int $offset
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return ($offset >= 0 AND $offset < $this->_totalRows);
@@ -170,6 +172,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      * @param int $offset
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         try {
@@ -188,6 +191,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      * @return void
      * @throws Error
      */
+    #[\ReturnTypeWillChange]
     final public function offsetSet($offset, $value)
     {
         throw new Error('Database results are read-only');
@@ -199,6 +203,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      * @return void
      * @throws Error
      */
+    #[\ReturnTypeWillChange]
     final public function offsetUnset($offset)
     {
         throw new Error('Database results are read-only');
@@ -217,30 +222,27 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      * Implements [Iterator::next], moves to the next row.
      * @return $this
      */
-    public function next(): self
+    public function next(): void
     {
         ++$this->_currentRow;
-        return $this;
     }
 
     /**
      * Implements [Iterator::prev], moves to the previous row.
      * @return $this
      */
-    public function prev(): self
+    public function prev(): void
     {
         --$this->_currentRow;
-        return $this;
     }
 
     /**
      * Implements [Iterator::rewind], sets the current row to zero.
      * @return $this
      */
-    public function rewind(): self
+    public function rewind(): void
     {
         $this->_currentRow = 0;
-        return $this;
     }
 
     /**
